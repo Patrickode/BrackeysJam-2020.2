@@ -57,25 +57,31 @@ public class PlayerMovement : MonoBehaviour
 
     //--- Input Getters ---//
 
-    private void Awake()
+    private void GetMoveInput()
     {
-        EventDispatcher.AddListener<EventDefiner.MoveInput>(GetMoveInput);
-        EventDispatcher.AddListener<EventDefiner.JumpInput>(GetJumpInput);
-    }
-    private void OnDestroy()
-    {
-        EventDispatcher.RemoveListener<EventDefiner.MoveInput>(GetMoveInput);
-        EventDispatcher.RemoveListener<EventDefiner.JumpInput>(GetJumpInput);
-    }
+        moveInputVector = Vector3.zero;
 
-    private void GetMoveInput(EventDefiner.MoveInput evt)
-    {
-        moveInputVector = evt.Direction;
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            moveInputVector += Vector3.forward;
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            moveInputVector += Vector3.left;
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            moveInputVector += Vector3.back;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            moveInputVector += Vector3.right;
+        }
     }
-    private void GetJumpInput(EventDefiner.JumpInput evt)
+    private void GetJumpInput()
     {
-        jumpPressedThisFrame = evt.PressedThisFrame;
-        jumpInputHeld = evt.IsHeld;
+        jumpPressedThisFrame = Input.GetKeyDown(KeyCode.Space);
+        jumpInputHeld = Input.GetKey(KeyCode.Space);
     }
 
     //--- Update Functions --- //
@@ -104,6 +110,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        GetMoveInput();
+        GetJumpInput();
+
         //Inspired / adapted from http://answers.unity.com/answers/196395/view.html
         //Cast a sphere with the same radius as the player downward to see if there's something underneath.
         bool groundedCheck = Physics.SphereCast
