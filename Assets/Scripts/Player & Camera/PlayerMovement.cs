@@ -61,22 +61,24 @@ public class PlayerMovement : MonoBehaviour
     {
         moveInputVector = Vector3.zero;
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
             moveInputVector += Vector3.forward;
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             moveInputVector += Vector3.left;
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
         {
             moveInputVector += Vector3.back;
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             moveInputVector += Vector3.right;
         }
+
+        moveInputVector.Normalize();
     }
     private void GetJumpInput()
     {
