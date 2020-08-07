@@ -17,7 +17,6 @@ public class PointInTime
 public class PlayerRewind : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Rigidbody rb = null;
     [SerializeField] private Transform outerCore = null;
     [SerializeField] private Transform innerCore = null;
     [SerializeField] private Renderer outerCoreRend = null;
@@ -30,6 +29,8 @@ public class PlayerRewind : MonoBehaviour
 
     [Header("Rewind Pause")]
     [SerializeField] [Range(0f, 2f)] private float rewindPauseTime = 1f;
+    private float pauseTimer = 0f;
+    private bool rewindPause;
 
     private Vector3 outerCoreScale;
     private Vector3 innerCoreScale;
@@ -46,8 +47,19 @@ public class PlayerRewind : MonoBehaviour
 
     private void Update()
     {
+        if (rewindPause)
+        {
+            pauseTimer += Time.unscaledDeltaTime / rewindPauseTime;
+
+            if (pauseTimer >= 1)
+            {
+                rewindPause = false;
+                pauseTimer = 0;
+                Time.timeScale = 1;
+            }
+        }
         //If recording is not cooling down,
-        if (!onRecordCooldown)
+        else if (!onRecordCooldown)
         {
             //Allow recording / rewinding to the recorded point.
             if (Input.GetMouseButtonDown(0))
@@ -133,7 +145,12 @@ public class PlayerRewind : MonoBehaviour
 
         //Enable the recovery burst object, which will let out a burst of particles and disable itself
         if (!onCooldown) { recoveryBurst.SetActive(true); }
-        //Dispatch an event to signal that the player has rewound
-        else { EventDispatcher.Dispatch(new EventDefiner.Rewind(rewindPauseTime)); }
+        //Pause everything for a short time after rewinding time
+        else
+        {
+            rewindPause = true;
+            Time.timeScale = 0;
+            EventDispatcher.Dispatch(new EventDefiner.Rewind(rewindPauseTime));
+        }
     }
 }
