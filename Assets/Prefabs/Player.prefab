@@ -5019,12 +5019,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e077a2b3745a440b0406a72492f907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 4751596347764074779}
   outerCore: {fileID: 7919567160933257213}
   innerCore: {fileID: 1620196483478187770}
   outerCoreRend: {fileID: 1143469261668820061}
   recoveryBurst: {fileID: 7952983480611689124}
   recordCooldown: 0.8
+  rewindPauseTime: 0.75
 --- !u!1 &4751596349480888153
 GameObject:
   m_ObjectHideFlags: 0
