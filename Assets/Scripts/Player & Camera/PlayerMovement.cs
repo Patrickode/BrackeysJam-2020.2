@@ -55,6 +55,18 @@ public class PlayerMovement : MonoBehaviour
     private bool jumpPressedThisFrame;
     private bool jumpInputHeld;
 
+    private bool levelEnding = false;
+
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+    private void OnLevelEnd(EventDefiner.LevelEnd evt) { levelEnding = true; }
+
     //--- Input Getters ---//
 
     private void GetMoveInput()
@@ -112,8 +124,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        GetMoveInput();
-        GetJumpInput();
+        if (!levelEnding)
+        {
+            GetMoveInput();
+            GetJumpInput();
+        }
 
         //Inspired / adapted from http://answers.unity.com/answers/196395/view.html
         //Cast a sphere with the same radius as the player downward to see if there's something underneath.

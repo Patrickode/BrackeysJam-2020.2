@@ -38,6 +38,18 @@ public class PlayerRewind : MonoBehaviour
 
     private PointInTime recordedPoint = null;
 
+    private bool levelEnding = false;
+
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+    private void OnLevelEnd(EventDefiner.LevelEnd evt) { levelEnding = true; }
+
     private void Start()
     {
         outerCoreScale = outerCore.localScale;
@@ -61,8 +73,8 @@ public class PlayerRewind : MonoBehaviour
         //If recording is not cooling down,
         else if (!onRecordCooldown)
         {
-            //Allow recording / rewinding to the recorded point.
-            if (Input.GetMouseButtonDown(0))
+            //Allow recording / rewinding to the recorded point, if the level isn't ending.
+            if (!levelEnding && Input.GetMouseButtonDown(0))
             {
                 if (recordedPoint == null)
                 {

@@ -4878,6 +4878,7 @@ GameObject:
   - component: {fileID: 4751596347764074779}
   - component: {fileID: 4751596347764074778}
   - component: {fileID: 2221512101339199991}
+  - component: {fileID: 3928084070574884233}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5024,7 +5025,20 @@ MonoBehaviour:
   outerCoreRend: {fileID: 1143469261668820061}
   recoveryBurst: {fileID: 7952983480611689124}
   recordCooldown: 0.8
-  rewindPauseTime: 0.75
+  rewindPauseTime: 0.5
+--- !u!114 &3928084070574884233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4751596347764074769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9112aae036bf324ea08900c7d74cebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shrinkSpeed: 0.5
 --- !u!1 &4751596349480888153
 GameObject:
   m_ObjectHideFlags: 0

@@ -5106,10 +5106,6 @@ PrefabInstance:
       propertyPath: burstLifetime
       value: 0.75
       objectReference: {fileID: 0}
-    - target: {fileID: 2221512101339199991, guid: 8b76be5bb80527a4783fa2da8a7255b2, type: 3}
-      propertyPath: rewindPauseTime
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 4751596347764074769, guid: 8b76be5bb80527a4783fa2da8a7255b2, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5281,6 +5277,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5572683973750819614, guid: e4e559b117ab0a44997b8d567fc2e833, type: 3}
+      propertyPath: m_Color.r
+      value: 0.16666651
+      objectReference: {fileID: 0}
+    - target: {fileID: 5572683973750819614, guid: e4e559b117ab0a44997b8d567fc2e833, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5572683973750819614, guid: e4e559b117ab0a44997b8d567fc2e833, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7132077579767110338, guid: e4e559b117ab0a44997b8d567fc2e833, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -4,10 +4,21 @@ using UnityEngine;
 
 public class CameraSwivel : MonoBehaviour
 {
-    [SerializeField]
-    private float rotateSpeed = 125;
+    [SerializeField] private float rotateSpeed = 125;
 
     private float currentSwivelValue;
+
+    private bool levelEnding = false;
+
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+    private void OnLevelEnd(EventDefiner.LevelEnd evt) { levelEnding = true; }
 
     private void GetSwivelInput()
     {
@@ -25,7 +36,10 @@ public class CameraSwivel : MonoBehaviour
 
     void Update()
     {
-        GetSwivelInput();
+        if (!levelEnding)
+        {
+            GetSwivelInput();
+        }
 
         if (!Mathf.Approximately(currentSwivelValue, 0))
         {
