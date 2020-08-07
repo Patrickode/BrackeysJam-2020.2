@@ -16,19 +16,40 @@ public class PointInTime
 
 public class PlayerRewind : MonoBehaviour
 {
-    [SerializeField] Rigidbody rb = null;
-    [SerializeField] GameObject outerCore = null;
+    [Header("References")]
+    [SerializeField] private Rigidbody rb = null;
+    [SerializeField] private Transform outerCore = null;
+    [SerializeField] private Transform innerCore = null;
+    [SerializeField] private Renderer outerCoreRend = null;
+    [SerializeField] private GameObject recoveryBurst = null;
 
-    [SerializeField] [Range(0f, 5f)] float recordCooldown = 1f;
-    private float recordTimer = 0f;
+    [Header("Cooldown")]
+    [SerializeField] [Range(0f, 5f)] private float recordCooldown = 1f;
+    private float cooldownTimer = 0f;
     private bool onRecordCooldown = false;
+
+    [Header("Rewind Pause")]
+    [SerializeField] [Range(0f, 2f)] private float rewindPauseTime = 1f;
+
+    private Vector3 outerCoreScale;
+    private Vector3 innerCoreScale;
+    private Color outerCoreColor;
 
     private PointInTime recordedPoint = null;
 
+    private void Start()
+    {
+        outerCoreScale = outerCore.localScale;
+        innerCoreScale = innerCore.localScale;
+        outerCoreColor = outerCoreRend.material.color;
+    }
+
     private void Update()
     {
+        //If recording is not cooling down,
         if (!onRecordCooldown)
         {
+            //Allow recording / rewinding to the recorded point.
             if (Input.GetMouseButtonDown(0))
             {
                 if (recordedPoint == null)
@@ -38,19 +59,26 @@ public class PlayerRewind : MonoBehaviour
                 else
                 {
                     RewindToPoint();
-                    onRecordCooldown = true;
+                    SetCooldown(true);
                 }
             }
         }
         else
         {
-            recordTimer += Time.deltaTime;
+            //Add to the cooldown timer, formatted to go from 0 to 1.
+            cooldownTimer += Time.deltaTime / recordCooldown;
 
-            if (recordTimer >= recordCooldown)
+            if (cooldownTimer < 1)
             {
-                recordTimer = 0f;
-                onRecordCooldown = false;
+                //Gradually scale the outer core up during cooldown.
+                outerCore.localScale = Vector3.Lerp(innerCoreScale, outerCoreScale, cooldownTimer);
+
+                //Gradually fade the outer core in during cooldown.
+                Color smoothStepColor = outerCoreColor;
+                smoothStepColor.a = Mathf.SmoothStep(0, outerCoreColor.a, cooldownTimer);
+                outerCoreRend.material.color = smoothStepColor;
             }
+            else { SetCooldown(false); }
         }
     }
 
@@ -63,11 +91,14 @@ public class PlayerRewind : MonoBehaviour
         recordedPoint = new PointInTime(transform.position, transform.rotation);
 
         //Now uparent the player's outer core from the player and put it in the recorded position.
-        outerCore.transform.parent = null;
-        outerCore.transform.position = recordedPoint.position;
-        outerCore.transform.rotation = recordedPoint.rotation;
+        outerCore.parent = null;
+        outerCore.position = recordedPoint.position;
+        outerCore.rotation = recordedPoint.rotation;
     }
 
+    /// <summary>
+    /// Moves the player back to the recorded point in time, and does other relevant logic.
+    /// </summary>
     private void RewindToPoint()
     {
         //Move the player to the recorded PointInTime.
@@ -75,11 +106,34 @@ public class PlayerRewind : MonoBehaviour
         transform.rotation = recordedPoint.rotation;
 
         //Reparent the outer core to the player and make sure it lines up with the player.
-        outerCore.transform.parent = transform;
-        outerCore.transform.position = transform.position;
-        outerCore.transform.rotation = transform.rotation;
+        outerCore.parent = transform;
+        outerCore.position = transform.position;
+        outerCore.rotation = transform.rotation;
 
         //Erase the old recorded point because we just used it up.
         recordedPoint = null;
+    }
+
+    /// <summary>
+    /// Turns the record cooldown on or off, and does other relevant logic.
+    /// </summary>
+    /// <param name="onCooldown"></param>
+    private void SetCooldown(bool onCooldown)
+    {
+        //Set the cooldown status accordingly and reset the cooldownTimer.
+        onRecordCooldown = onCooldown;
+        cooldownTimer = 0f;
+
+        //Set the outer core's scale to the inner core if on cooldown. Otherwise, set it to its normal scale.
+        //This is so the outer core can grow during cooldown.
+        outerCore.localScale = onCooldown ? innerCoreScale : outerCoreScale;
+        //Make the outer core transparent if on cooldown. Otherwise, make it normally colored.
+        //This is so the outer core fades in during cooldown.
+        outerCoreRend.material.color = onCooldown ? Color.clear : outerCoreColor;
+
+        //Enable the recovery burst object, which will let out a burst of particles and disable itself
+        if (!onCooldown) { recoveryBurst.SetActive(true); }
+        //Dispatch an event to signal that the player has rewound
+        else { EventDispatcher.Dispatch(new EventDefiner.Rewind(rewindPauseTime)); }
     }
 }
