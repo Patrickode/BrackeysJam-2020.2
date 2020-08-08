@@ -36,6 +36,7 @@ public class ShrinkInEnding : MonoBehaviour
             yield return null;
         }
 
+        gameObject.SetActive(false);
         progress = 0f;
     }
 }

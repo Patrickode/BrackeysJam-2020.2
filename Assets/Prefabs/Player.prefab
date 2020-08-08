@@ -10153,6 +10153,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RecoveryBurst
       objectReference: {fileID: 0}
+    - target: {fileID: 5428836491540976780, guid: dcf11854c9b706a418e300eec9dc0852, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcf11854c9b706a418e300eec9dc0852, type: 3}
 --- !u!4 &7952983480611689121 stripped

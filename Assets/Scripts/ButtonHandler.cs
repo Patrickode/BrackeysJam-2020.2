@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ButtonHandler : MonoBehaviour
 {
-    [SerializeField] private List<BreakableHandler> linkedBreakables;
+    [SerializeField] private List<BreakableHandler> linkedBreakables = null;
     [SerializeField] private float buttonCooldown = 0.5f;
     private Coroutine cooldownCor = null;
     private bool coolingDown = false;

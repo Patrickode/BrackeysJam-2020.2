@@ -5,8 +5,8 @@ using UnityEngine;
 public class BreakableHandler : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Renderer rend;
-    [SerializeField] private Collider coll;
+    [SerializeField] private Renderer rend = null;
+    [SerializeField] private Collider coll = null;
     [SerializeField] private ParticleSystem pSystem = null;
 
     [Header("Materials")]

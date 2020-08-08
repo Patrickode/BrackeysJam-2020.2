@@ -86,6 +86,8 @@ public class PlayerRewind : MonoBehaviour
                     SetCooldown(true);
                 }
             }
+
+            CheckForReset();
         }
         else
         {
@@ -103,6 +105,8 @@ public class PlayerRewind : MonoBehaviour
                 outerCoreRend.material.color = smoothStepColor;
             }
             else { SetCooldown(false); }
+
+            CheckForReset();
         }
     }
 
@@ -163,6 +167,14 @@ public class PlayerRewind : MonoBehaviour
             rewindPause = true;
             Time.timeScale = 0;
             EventDispatcher.Dispatch(new EventDefiner.Rewind(rewindPauseTime));
+        }
+    }
+
+    private void CheckForReset()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            EventDispatcher.Dispatch(new EventDefiner.LevelEnd(false));
         }
     }
 }
